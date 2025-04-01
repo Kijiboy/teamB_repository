@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class player_physical_ability
-{
-    [SerializeField] public float runSpeed;
-    [SerializeField] public float jumpStrength;
-}
 
 public class player_control : MonoBehaviour
 {
-    [SerializeField] public player_physical_ability pPA_1;
+    [SerializeField] playerDeta pD;
+    [SerializeField] public player_Physical_Ability pPA;
     [SerializeField] Rigidbody2D playerRb;
     [SerializeField] player_detectGround pDG;
     public bool isRunning { get; private set; }
     public bool isJumping { get; private set; }//下のjump関数でtrueにして、着地関数でfalseに(制作予定)
+    Vector2 playerScale ;
+
+    private void Start()
+    {
+        pPA = pD.pPA_D;
+        playerScale = transform.localScale;
+    }
 
     void Update()
     {
@@ -45,9 +47,13 @@ public class player_control : MonoBehaviour
             movingDirection = 1;
         }
 
-        playerRb.velocity = new Vector2(pPA_1.runSpeed * movingDirection, playerRb.velocity.y);//早さにムラができるのは嫌だったのでvelocityを直接書き換えることにしました。
+        playerRb.velocity = new Vector2(pPA.runSpeed * movingDirection, playerRb.velocity.y);//早さにムラができるのは嫌だったのでvelocityを直接書き換えることにしました。
         if (movingDirection == 0) { return false; }
-        else { return true; }
+        else
+        {
+            transform.localScale = new Vector2(playerScale.x * movingDirection, playerScale.y);
+            return true;
+        }
     }
 
     public bool jump()//ジャンプの関数、ジャンプ中かどうかを返り値として返す
@@ -57,7 +63,7 @@ public class player_control : MonoBehaviour
             if (Input.GetKey(KeyCode.W)) //Wが押されている間ジャンプ、GetKeyDownでも可
             {
                 playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
-                playerRb.AddForce(new Vector2(0, pPA_1.jumpStrength), ForceMode2D.Impulse);
+                playerRb.AddForce(new Vector2(0, pPA.jumpStrength), ForceMode2D.Impulse);
                 return true;
             }
 
