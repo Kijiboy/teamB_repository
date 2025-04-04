@@ -19,9 +19,6 @@ public class plantAdministerSystem : MonoBehaviour
             {
                 button.GetComponent<Image>().color = selectedColor;//ボタンの色を変えた後
                 button.GetComponent<Button>().enabled = false;//念の為ボタンとして使えなくする
-
-                //↓ここでselectedPlantに選ばれた植物を代入
-                selectedPlant = button.GetComponent<plantButtonScript>().plantType;
             }
 
             else
@@ -29,6 +26,8 @@ public class plantAdministerSystem : MonoBehaviour
                 button.GetComponent<Image>().color = Color.white;
                 button.GetComponent<Button>().enabled = true;//別のボタンが選ばれたら使えるようにする
             }
+
+            //↓ここでselectedPlantに選ばれた植物を代入
         }
     }
 }

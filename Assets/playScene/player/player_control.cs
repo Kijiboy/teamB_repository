@@ -60,11 +60,10 @@ public class player_control : MonoBehaviour
     {
         if (pDG.isOnGround)//着地中に
         {
-            if (Input.GetKeyDown(KeyCode.W)) //Wが押されている間ジャンプ、GetKeyDownでも可
+            if (Input.GetKey(KeyCode.W)) //Wが押されている間ジャンプ、GetKeyDownでも可
             {
                 playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
                 playerRb.AddForce(new Vector2(0, pPA.jumpStrength), ForceMode2D.Impulse);
-                StartCoroutine(jumpPressedDuration());
                 return true;
             }
 
@@ -77,19 +76,6 @@ public class player_control : MonoBehaviour
         else
         {
             return isJumping;
-        }
-    }
-
-    private IEnumerator jumpPressedDuration()//ボタンを押した長さに応じて高さを帰る為のスクリプト
-    {
-        for (int i = 0; i < 15/*変数作ろうと思うのですが、とりあえず15で*/; i++)
-        {
-            if (Input.GetKey(KeyCode.W)) { playerRb.AddForce(new Vector2(0, pPA.jumpStrength * 5)); }
-
-            for (int x = 0; x < 10; x++)//とりあえず15フレーム
-            {
-                yield return null;
-            }
         }
     }
 
