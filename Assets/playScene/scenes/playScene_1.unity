@@ -152,12 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d80cda2da7572487197b39af7b22a8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plants: []
+  selectedPlant: {fileID: 0}
   plantButtons:
   - {fileID: 564083650}
   - {fileID: 1290884637}
   - {fileID: 371662440}
   - {fileID: 1484504945}
+  plantForEachButton: []
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!4 &32781559
 Transform:
@@ -531,14 +532,14 @@ RectTransform:
   m_GameObject: {fileID: 371662440}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3052996, y: 1.3052996, z: 1.3052996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 605718712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -152.19998, y: 0}
+  m_AnchoredPosition: {x: -45.270004, y: -95}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &371662443
@@ -592,6 +593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonNumber: 3
+  plantType: {fileID: 0}
   pTBC: {fileID: 32781558}
 --- !u!114 &371662446
 MonoBehaviour:
@@ -773,7 +775,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -860,14 +862,14 @@ RectTransform:
   m_GameObject: {fileID: 564083650}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3052996, y: 1.3052996, z: 1.3052996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 605718712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 54.850006, y: 0}
+  m_AnchoredPosition: {x: 225, y: -95}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &564083653
@@ -921,6 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonNumber: 1
+  plantType: {fileID: 0}
   pTBC: {fileID: 32781558}
 --- !u!114 &564083656
 MonoBehaviour:
@@ -1048,7 +1051,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pPA_D:
     runSpeed: 7
-    jumpStrength: 20
+    jumpStrength: 10
   pOp_D:
     seeds: []
 --- !u!4 &697252536
@@ -1114,7 +1117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1470,14 +1473,14 @@ RectTransform:
   m_GameObject: {fileID: 1290884637}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3052996, y: 1.3052996, z: 1.3052996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 605718712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -48.2, y: 0}
+  m_AnchoredPosition: {x: 90.48099, y: -95}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1290884640
@@ -1531,6 +1534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonNumber: 2
+  plantType: {fileID: 0}
   pTBC: {fileID: 32781558}
 --- !u!114 &1290884643
 MonoBehaviour:
@@ -1617,14 +1621,14 @@ RectTransform:
   m_GameObject: {fileID: 1484504945}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3052996, y: 1.3052996, z: 1.3052996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 605718712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -257.5, y: 0}
+  m_AnchoredPosition: {x: -182.73001, y: -95}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1484504948
@@ -1678,6 +1682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonNumber: 4
+  plantType: {fileID: 0}
   pTBC: {fileID: 32781558}
 --- !u!114 &1484504951
 MonoBehaviour:
@@ -1831,8 +1836,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pD: {fileID: 697252535}
   pPA:
-    runSpeed: 0
-    jumpStrength: 0
+    runSpeed: 7
+    jumpStrength: 10
   playerRb: {fileID: 1752396207}
   pDG: {fileID: 1243869572}
 --- !u!50 &1752396207
