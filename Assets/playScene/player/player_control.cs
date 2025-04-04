@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class player_control : MonoBehaviour
 {
-    [SerializeField] playerDeta pD;
+    [SerializeField] playerData pD;
     [SerializeField] public player_Physical_Ability pPA;
     [SerializeField] Rigidbody2D playerRb;
     [SerializeField] player_detectGround pDG;

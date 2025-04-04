@@ -15,8 +15,10 @@ public class player_Obtained_Plants
     public GameObject[] seeds;
 }
 
-public class playerDeta : MonoBehaviour
+public class playerData : MonoBehaviour
 {
+    [Header("身体能力")]
     public player_Physical_Ability pPA_D;//playerPhysicalAbility_Deta
+    [Header("習得した植物")]
     public player_Obtained_Plants pOp_D;//player_Obtained_Plants_Deta
 }
