@@ -36,6 +36,8 @@ public class player_control : MonoBehaviour
 
     public bool run()//左右の動き、移動中かどうかを返り値として返す
     {
+        float runSpeed = pPA.baseRunSpeed;
+        if (isJumping) { runSpeed = pPA.baseRunSpeed * pPA.speedMultiplierInAir; }//空中での移動速度を増やす目的
         int movingDirection = 0;//向きのX方向を定めます。
 
         if (Input.GetKey(KeyCode.A))
@@ -47,7 +49,7 @@ public class player_control : MonoBehaviour
             movingDirection = 1;
         }
 
-        playerRb.velocity = new Vector2(pPA.runSpeed * movingDirection, playerRb.velocity.y);//早さにムラができるのは嫌だったのでvelocityを直接書き換えることにしました。
+        playerRb.velocity = new Vector2(runSpeed * movingDirection, playerRb.velocity.y);//早さにムラができるのは嫌だったのでvelocityを直接書き換えることにしました。
         if (movingDirection == 0) { return false; }
         else
         {
@@ -58,7 +60,7 @@ public class player_control : MonoBehaviour
 
     public bool jump()//ジャンプの関数、ジャンプ中かどうかを返り値として返す
     {
-        if (pDG.isOnGround)//着地中に
+        if (pDG.isOnGround)//着地中に wを押した瞬間にOnGroundがFalseにならない？
         {
             if (Input.GetKeyDown(KeyCode.W)) //Wが押されている間ジャンプ、GetKeyDownでも可
             {
@@ -76,7 +78,7 @@ public class player_control : MonoBehaviour
 
         else
         {
-            return isJumping;
+            return true;
         }
     }
 

@@ -1440,8 +1440,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pPA_D:
-    runSpeed: 7
+    baseRunSpeed: 7
     jumpStrength: 10
+    speedMultiplierInAir: 1.4
   pOp_D:
     seeds: []
 --- !u!4 &697252536
@@ -2616,8 +2617,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pD: {fileID: 697252535}
   pPA:
-    runSpeed: 7
+    baseRunSpeed: 7
     jumpStrength: 10
+    speedMultiplierInAir: 0
   playerRb: {fileID: 1752396207}
   pDG: {fileID: 1243869572}
 --- !u!50 &1752396207

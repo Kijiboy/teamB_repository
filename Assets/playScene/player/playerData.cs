@@ -5,8 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class player_Physical_Ability
 {
-    public float runSpeed;
+    public float baseRunSpeed;
     public float jumpStrength;
+    public float speedMultiplierInAir;
 }
 
 [System.Serializable]
