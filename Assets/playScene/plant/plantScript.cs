@@ -15,3 +15,4 @@ public class plantScript : MonoBehaviour
 {
     public plantDataClass plantData;
 }
+//TODO: 銃で撃たれた際にor地面に当たった瞬間に種から成長する関数を追加右下の
