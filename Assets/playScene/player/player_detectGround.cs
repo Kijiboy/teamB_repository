@@ -6,13 +6,19 @@ public class player_detectGround : MonoBehaviour
 {
     public bool isOnGround { get; private set; }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        isOnGround = true;
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        isOnGround = false;
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = false;
+        }
     }
 }

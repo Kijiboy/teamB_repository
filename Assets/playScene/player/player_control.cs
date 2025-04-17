@@ -11,10 +11,13 @@ public class player_control : MonoBehaviour
     [SerializeField] player_detectGround pDG;
     public bool isRunning { get; private set; }
     public bool isJumping { get; private set; }//下のjump関数でtrueにして、着地関数でfalseに(制作予定)
+
+    public bool isFacingRight { get; private set; }
     Vector2 playerScale ;
 
     private void Start()
     {
+        isFacingRight = true;
         pPA = pD.pPA_D;
         playerScale = transform.localScale;
     }
@@ -43,10 +46,12 @@ public class player_control : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             movingDirection = -1;
+            isFacingRight = false;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             movingDirection = 1;
+            isFacingRight = true;
         }
 
         playerRb.velocity = new Vector2(runSpeed * movingDirection, playerRb.velocity.y);//早さにムラができるのは嫌だったのでvelocityを直接書き換えることにしました。
@@ -88,7 +93,7 @@ public class player_control : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.W)) { playerRb.AddForce(new Vector2(0, pPA.jumpStrength * 5)); }
 
-            for (int x = 0; x < 10; x++)//とりあえず15フレーム
+            for (int x = 0; x < 7; x++)//とりあえず7フレーム
             {
                 yield return null;
             }

@@ -10,6 +10,7 @@ public class plantAdministerSystem : MonoBehaviour
     public GameObject[] plantForEachButton;//上のボタンに対応した植物のデータを左に代入する予定ですけど少し複雑ですね
 
     [SerializeField] Color selectedColor;
+    [SerializeField] Color notSelectedColor;
 
     public void buttonPressed(int number)
     {
@@ -26,7 +27,7 @@ public class plantAdministerSystem : MonoBehaviour
 
             else
             {
-                button.GetComponent<Image>().color = Color.white;
+                button.GetComponent<Image>().color = notSelectedColor;
                 button.GetComponent<Button>().enabled = true;//別のボタンが選ばれたら使えるようにする
             }
         }
