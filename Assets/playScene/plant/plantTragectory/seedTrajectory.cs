@@ -52,13 +52,14 @@ public class seedTrajectory : MonoBehaviour
 {
     if (!drawArc) return; // drawArc が false の場合は処理をスキップ
 
-    initialVelocity = player_Control.isFacingRight
+    initialVelocity = player_Control.isFacingRight//ifelseの簡略化した形式っぽい？
         ? sOP.plantData.baseVelocity
         : new Vector3(-sOP.plantData.baseVelocity.x, sOP.plantData.baseVelocity.y, 0);
 
     float timeStep = predictionTime / segmentCount;
     bool draw = false;
     float hitTime = float.MaxValue;
+    Vector2 hitNormal = Vector2.zero;
 
     for (int i = 0; i < lineRenderers.Length; i++)
     {
@@ -69,7 +70,7 @@ public class seedTrajectory : MonoBehaviour
 
         if (!draw)
         {
-            hitTime = GetArcHitTime(startTime, endTime);
+            hitTime = GetArcHitTime(startTime, endTime , out  hitNormal);
             if (hitTime != float.MaxValue)
             {
                 draw = true;
@@ -80,7 +81,7 @@ public class seedTrajectory : MonoBehaviour
     if (hitTime != float.MaxValue)
     {
         Vector3 hitPosition = GetArcPositionAtTime(hitTime);
-        ShowPointer(hitPosition);
+        ShowPointer(hitPosition, hitNormal);
     }
     else
     {
@@ -128,10 +129,27 @@ public class seedTrajectory : MonoBehaviour
         drawArcAllTime = true;
     }
 
-    private void ShowPointer(Vector3 position)
+    private void ShowPointer(Vector3 position, Vector2 normal)
     {
-        pointerObject.transform.position = position;
+        if(normal == Vector2.zero) return;
+
+        float gridSize = 1.0f; // グリッドのサイズ
+        float snappedX = Mathf.Round(position.x / gridSize) * gridSize;
+        float snappedY = Mathf.Round(position.y / gridSize) * gridSize;
+
+        // 法線から角度を計算してポインターを回転
+        float angle = Mathf.Atan2(normal.y, normal.x) * Mathf.Rad2Deg;
+        pointerObject.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+
+        Vector2 gap= Vector2.zero;
+
+        if (normal.x != 0){gap.y = 0.5f;}
+        if (normal.y != 0){gap.x = -0.5f;}
+
+        pointerObject.transform.position = new Vector2(snappedX + (normal.x / 2), snappedY + (normal.y / 2)) - gap;
+
         pointerObject.SetActive(true);
+        //TODOななめの時は表紙をなくす、また、実弾も升目に合わせる
     }
 
     private Vector3 GetArcPositionAtTime(float time)
@@ -181,7 +199,7 @@ public class seedTrajectory : MonoBehaviour
         }
     }
 
-    private float GetArcHitTime(float startTime, float endTime)
+    private float GetArcHitTime(float startTime, float endTime, out Vector2 hitNormal)
     {
         Vector3 startPosition = GetArcPositionAtTime(startTime);
         Vector3 endPosition = GetArcPositionAtTime(endTime);
@@ -190,8 +208,10 @@ public class seedTrajectory : MonoBehaviour
         if (hitInfo.collider != null)
         {
             float distance = Vector3.Distance(startPosition, endPosition);
-            return startTime + (endTime - startTime) * (hitInfo.distance / distance);
+            hitNormal = hitInfo.normal;
+            return startTime + (endTime - startTime) * (hitInfo.distance / distance);;
         }
+        hitNormal = Vector2.zero;
         return float.MaxValue;
     }
 }
