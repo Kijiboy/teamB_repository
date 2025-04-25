@@ -5,8 +5,6 @@ using UnityEngine;
 public class tellDirection : MonoBehaviour//なんでスクリプト一緒にしたかは不明。気になったら分けてください
 {
     [SerializeField] seedScript seedS;
-    [SerializeField] plantTragectoryBoxSC plantT;
-
     [SerializeField] int number;
 
     [SerializeField]bool isTragectory;
@@ -15,27 +13,13 @@ public class tellDirection : MonoBehaviour//なんでスクリプト一緒にし
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            if(!isTragectory)
-            {
-                seedS.receiceDirection(number);
-            }
-
+            seedS.receiceDirection(number);
         }
         else if(collision.gameObject.CompareTag("Plant"))//今後帰るかも
         {
             Destroy(seedS.gameObject);
         }
     }
-
-    void OnTriggerStay2D(Collider2D collision)
-    {
-        Debug.Log("tellDirection: " + collision.gameObject.name);
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            if(isTragectory)
-            {
-                plantT.receiceDirection(number);
-            }
-        }
-    }
 }
+
+    

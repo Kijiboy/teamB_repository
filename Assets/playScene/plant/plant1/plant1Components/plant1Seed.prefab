@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.56178945, y: 0.56178945, z: 0.56178945}
+  m_LocalScale: {x: 0.12409879, y: 0.12409879, z: 0.12409879}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7148169909560267088}
@@ -76,7 +76,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8794489, y: 0.09370875}
+  m_Size: {x: 0.4, y: 0.09370875}
   m_EdgeRadius: 0
 --- !u!114 &7398616064633951212
 MonoBehaviour:
@@ -91,7 +91,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedS: {fileID: 7297782014522273812}
-  plantT: {fileID: 0}
   number: 1
   isTragectory: 0
 --- !u!1 &556489361495024724
@@ -122,7 +121,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.56178945, y: 0.56178945, z: 0.56178945}
+  m_LocalScale: {x: 0.12409879, y: 0.12409879, z: 0.12409879}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7148169909560267088}
@@ -170,7 +169,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8794489, y: 0.09370875}
+  m_Size: {x: 0.4, y: 0.09370875}
   m_EdgeRadius: 0
 --- !u!114 &3455347513313088663
 MonoBehaviour:
@@ -185,7 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedS: {fileID: 7297782014522273812}
-  plantT: {fileID: 0}
   number: 3
   isTragectory: 0
 --- !u!1 &2925639611291630663
@@ -216,7 +214,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.56178945, y: 0.56178945, z: 0.56178945}
+  m_LocalScale: {x: 0.12409879, y: 0.12409879, z: 0.12409879}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7148169909560267088}
@@ -264,7 +262,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.09370875, y: 0.8794489}
+  m_Size: {x: 0.09370875, y: 0.4}
   m_EdgeRadius: 0
 --- !u!114 &8959240293416776589
 MonoBehaviour:
@@ -279,7 +277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedS: {fileID: 7297782014522273812}
-  plantT: {fileID: 0}
   number: 0
   isTragectory: 0
 --- !u!1 &7220404663798823830
@@ -443,7 +440,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.1, y: 0.1}
   m_EdgeRadius: 0
 --- !u!114 &7297782014522273812
 MonoBehaviour:
@@ -491,7 +488,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.56178945, y: 0.56178945, z: 0.56178945}
+  m_LocalScale: {x: 0.12409879, y: 0.12409879, z: 0.12409879}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7148169909560267088}
@@ -539,7 +536,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.09370875, y: 0.8794489}
+  m_Size: {x: 0.09370875, y: 0.4}
   m_EdgeRadius: 0
 --- !u!114 &1399794475092624965
 MonoBehaviour:
@@ -554,6 +551,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedS: {fileID: 7297782014522273812}
-  plantT: {fileID: 0}
   number: 2
   isTragectory: 0

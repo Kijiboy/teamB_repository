@@ -49,45 +49,106 @@ public class seedTrajectory : MonoBehaviour
 
 
     void FixedUpdate()
-{
-    if (!drawArc) return; // drawArc が false の場合は処理をスキップ
-
-    initialVelocity = player_Control.isFacingRight//ifelseの簡略化した形式っぽい？
-        ? sOP.plantData.baseVelocity
-        : new Vector3(-sOP.plantData.baseVelocity.x, sOP.plantData.baseVelocity.y, 0);
-
-    float timeStep = predictionTime / segmentCount;
-    bool draw = false;
-    float hitTime = float.MaxValue;
-    Vector2 hitNormal = Vector2.zero;
-
-    for (int i = 0; i < lineRenderers.Length; i++)
     {
-        float startTime = timeStep * i;
-        float endTime = startTime + timeStep;
-
-        SetLineRendererPosition(i, startTime, endTime, !draw);
-
-        if (!draw)
+        float velocityStep = 3f;
+        Debug.Log("angle: " + (Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg));
+        if (Input.GetKey(KeyCode.I))
         {
-            hitTime = GetArcHitTime(startTime, endTime , out  hitNormal);
-            if (hitTime != float.MaxValue)
+            if((Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg >= 95) ||( Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg <= 85))
             {
-                draw = true;
+            if(player_Control.isFacingRight)
+            {
+                AdjustVelocity(velocityStep);
+            }
+            else
+            {
+                AdjustVelocity(-velocityStep);
             }
         }
+        }
+
+        if (Input.GetKey(KeyCode.K))
+        {
+            if((Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg <= -95) || (Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg >= -85))
+            {
+                if(player_Control.isFacingRight)
+                {
+                    AdjustVelocity(-velocityStep);
+                }
+                else
+                {
+                    AdjustVelocity(velocityStep);
+                }
+            }
+        }
+
+        
+        if(player_Control.isFacingRight)
+        {
+            initialVelocity.x = Mathf.Abs(initialVelocity.x);
+        }
+        else
+        {
+            initialVelocity.x = -Mathf.Abs(initialVelocity.x);
+        }
+        if (!drawArc) return; // drawArc が false の場合は処理をスキップ
+
+
+
+        float timeStep = predictionTime / segmentCount;
+        bool draw = false;
+        float hitTime = float.MaxValue;
+        Vector2 hitNormal = Vector2.zero;
+
+        for (int i = 0; i < lineRenderers.Length; i++)
+        {
+            float startTime = timeStep * i;
+            float endTime = startTime + timeStep;
+
+            SetLineRendererPosition(i, startTime, endTime, !draw);
+
+            if (!draw)
+            {
+                hitTime = GetArcHitTime(startTime, endTime , out  hitNormal);
+                if (hitTime != float.MaxValue)
+                {
+                    draw = true;
+                }
+            }
+        }
+
+        if (hitTime != float.MaxValue)
+        {
+            if(pointerObject == null)
+            {
+                pointerObject = Instantiate(pointerPrefab, Vector3.zero, Quaternion.identity);
+            }
+            Vector3 hitPosition = GetArcPositionAtTime(hitTime);
+            ShowPointer(hitPosition, hitNormal);
+        }
+        else
+        {
+            Destroy(pointerObject);
+
+        }
+
+        sOP.plantData.baseVelocity = initialVelocity;
     }
 
-    if (hitTime != float.MaxValue)
+    private void AdjustVelocity(float angleStep)
     {
-        Vector3 hitPosition = GetArcPositionAtTime(hitTime);
-        ShowPointer(hitPosition, hitNormal);
+        // 現在の速度ベクトルの角度を計算
+        float currentAngle = Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg;
+        Debug.Log("Current Angle: " + currentAngle);
+        // 角度を調整（半円を描くように）
+        currentAngle += angleStep;
+
+        // 新しい角度に基づいて速度ベクトルを計算
+
+        float speed = sOP.plantData.baseVelocity.magnitude;
+        initialVelocity.x = Mathf.Cos(currentAngle * Mathf.Deg2Rad) * speed;
+        initialVelocity.y = Mathf.Sin(currentAngle * Mathf.Deg2Rad) * speed;
     }
-    else
-    {
-        pointerObject.SetActive(false);
-    }
-}
                 
     private IEnumerator DrawTrajectoryGradually()
     {
@@ -131,25 +192,29 @@ public class seedTrajectory : MonoBehaviour
 
     private void ShowPointer(Vector3 position, Vector2 normal)
     {
-        if(normal == Vector2.zero) return;
+        
+        if (normal == Vector2.zero) return; // 法線がゼロベクトルの場合は処理をスキップ
 
-        float gridSize = 1.0f; // グリッドのサイズ
-        float snappedX = Mathf.Round(position.x / gridSize) * gridSize;
-        float snappedY = Mathf.Round(position.y / gridSize) * gridSize;
+        float snappedX = Mathf.Floor(position.x+(normal.x*0.05f)) + 0.5f;
+        float snappedY = Mathf.Floor(position.y-(normal.y*0.05f)) + 0.5f;
 
         // 法線から角度を計算してポインターを回転
         float angle = Mathf.Atan2(normal.y, normal.x) * Mathf.Rad2Deg;
         pointerObject.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
 
-        Vector2 gap= Vector2.zero;
-
-        if (normal.x != 0){gap.y = 0.5f;}
-        if (normal.y != 0){gap.x = -0.5f;}
-
-        pointerObject.transform.position = new Vector2(snappedX + (normal.x / 2), snappedY + (normal.y / 2)) - gap;
-
+        Vector2 gap = Vector2.zero;
+        
+        if(normal.y == -1)
+        {
+            gap.y = -1;
+        }
+        if(normal.y>0.3 || normal.y<-0.3)//1でもいいけど誤差を許さないため
+        {
+            gap.y += 1;
+        }
+        // ポインターの位置を設定
+        pointerObject.transform.position = new Vector2(snappedX , snappedY) + gap;
         pointerObject.SetActive(true);
-        //TODOななめの時は表紙をなくす、また、実弾も升目に合わせる
     }
 
     private Vector3 GetArcPositionAtTime(float time)

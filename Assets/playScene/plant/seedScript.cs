@@ -26,16 +26,16 @@ public class seedScript : MonoBehaviour
 
     void Start()
     {
-     player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
-        if(player.GetComponent<player_control>().isFacingRight)
-        {
+        /*if(player.GetComponent<player_control>().isFacingRight)
+        {*/
             plantData.actualVelocity = new Vector3(plantData.baseVelocity.x, plantData.baseVelocity.y, 0);
-        }
+        /*}
         else
         {
             plantData.actualVelocity = new Vector3(-plantData.baseVelocity.x, plantData.baseVelocity.y, 0);
-        }
+        }*/
         shootOut();
     }
 
@@ -46,9 +46,23 @@ public class seedScript : MonoBehaviour
     public void land(float angle)//着地した
     {
         GameObject obj = grow(angle);//ここの受け渡しが少し不恰好
-        Rigidbody2D rbO = obj.GetComponent<Rigidbody2D>();   
+        angle -= 90;//なぜかここのタイミングで調整
+
+        float gridSize = 1f; // グリッドのサイズ
+
+        // スナップ処理（Tilemap のアンカーを考慮）
+        float snappedX = Mathf.Floor(transform.position.x-0.05f / gridSize) * gridSize + gridSize * 0.5f;
+        float snappedY = Mathf.Floor(transform.position.y / gridSize) * gridSize + gridSize * 0.5f;
+
+        // 法線ベクトルを計算
+        obj.transform.position = new Vector2(snappedX, snappedY);
+
+        // Rigidbody2D の設定
+        Rigidbody2D rbO = obj.GetComponent<Rigidbody2D>();
         rbO.velocity = GetComponent<Rigidbody2D>().velocity.normalized * plantData.maturePlantMovingSpeed;
         rbO.isKinematic = true;
+
+        // 現在のオブジェクトを破棄
         Destroy(this.gameObject);
     }
 
