@@ -8,6 +8,33 @@ public class player_Physical_Ability
     public float baseRunSpeed;
     public float jumpStrength;
     public float speedMultiplierInAir;
+
+    public HPUI hpUI;
+    public int maxHP;
+    [SerializeField]private int _hp;
+    public int hp
+    {
+        get { return _hp; }
+        set
+        {
+            if (value > maxHP)
+            {
+                hpUI.hpUpdated(maxHP, maxHP);
+                _hp = maxHP;
+            }
+            else
+            if (value < 0)
+            {  hpUI.hpUpdated(0, maxHP);
+                _hp = 0;
+            }
+            else
+            {
+                hpUI.hpUpdated(value, maxHP);
+                _hp = value;
+            }
+        }
+    }
+
 }
 
 [System.Serializable]

@@ -24,7 +24,7 @@ public class plant2Script : MonoBehaviour
 
     public void grow()
     {
-        Instantiate(grownPrefab, transform.position, transform.rotation);
+        Instantiate(grownPrefab, transform.position, transform.rotation, transform);
         Destroy(immaturePlant);
         isMature = true;
     }
