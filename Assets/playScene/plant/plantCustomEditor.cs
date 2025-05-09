@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(seedScript))] // ネットのコードをほとんどそのまま使用
+[CustomEditor(typeof(plantScript))] // ネットのコードをほとんどそのまま使用
 public class plantCustomEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -10,13 +10,13 @@ public class plantCustomEditor : Editor
         DrawDefaultInspector();
 
         // **ターゲットのオブジェクトを取得**
-        seedScript plantSC = (seedScript)target;
+        plantScript plantSC = (plantScript)target;
 
         // **カスタムボタンを追加**
         if (GUILayout.Button("Grow plant"))
         {
             // **ボタンが押されたときの処理**
-            plantSC.land(270);
+            plantSC.gotShot();
         }
     }
 }

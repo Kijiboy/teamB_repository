@@ -7,12 +7,14 @@ public class plantButtonScript : MonoBehaviour
 {
     //この辺はボタンの持つ植物を渡したりするスクリプトです
     public int buttonNumber;
-    public GameObject plantType;//このボタン（項目）が示す植物。
-    [SerializeField] plantAdministerSystem pTBC;
+    public GameObject plantSeed;//このボタン（項目）が示す植物。
+    [SerializeField] plantAdministerSystem pAs;
 
     public void OnButtonPressed()
     {
-        pTBC.buttonPressed(buttonNumber);
+        pAs.buttonPressed(buttonNumber);
+        pAs.selectedPlant = plantSeed;
+        pAs.selectedPlantData = plantSeed.GetComponent<seedScript>().plantData;
         sOP.choosenButton = this;
     }
 

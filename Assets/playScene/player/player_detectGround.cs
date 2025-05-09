@@ -12,11 +12,19 @@ public class player_detectGround : MonoBehaviour
         {
             isOnGround = true;
         }
+        else if(collision.gameObject.CompareTag("plantGround"))
+        {
+            isOnGround = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = false;
+        }
+        else if(collision.gameObject.CompareTag("plantGround"))
         {
             isOnGround = false;
         }

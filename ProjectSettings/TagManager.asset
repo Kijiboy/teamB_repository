@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Plant
+  - plantGround
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - plantSeed
   - attractedToNothing
   - ground
-  - 
-  - 
+  - plant
+  - powerUp
   - 
   - 
   - 

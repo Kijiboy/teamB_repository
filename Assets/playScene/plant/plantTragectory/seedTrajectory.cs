@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class seedTrajectory : MonoBehaviour
@@ -13,19 +14,18 @@ public class seedTrajectory : MonoBehaviour
     [SerializeField, Tooltip("放物線の幅")]
     private float arcWidth = 0.02F;
     private LineRenderer[] lineRenderers;
-    private shootsOutPlant sOP;
+    [SerializeField] private plantAdministerSystem pAS;
     private Vector3 initialVelocity;
     private Vector3 arcStartPosition;
 
-    [SerializeField] float trajectorySpeed;
+    [SerializeField] float trajectorySpeed;//元々ゆっくり描画する予定だったのを瞬時に変えたからこれ0にしになきゃバグる
 
     [SerializeField] LayerMask collisionLayer; // インスペクターで設定可能
 
     [SerializeField] GameObject player;
     [SerializeField] player_control player_Control;
     Rigidbody2D rb;
-
-    [SerializeField] GameObject pointerPrefab;
+    public GameObject pointerPrefab;
     GameObject pointerObject;
 
     GameObject arcObjectsParent;
@@ -34,67 +34,30 @@ public class seedTrajectory : MonoBehaviour
 
     Vector2[] lineRendererPositions1;
     Vector2[] lineRendererPositions2;
+
+    bool isShowingPointer;
     
 
     void Start()
     {
-        pointerObject = Instantiate(pointerPrefab, Vector3.zero, Quaternion.identity);
-
         CreateLineRendererObjects();//ラインレンダラーのオブジェクトを必要な数を作成してるっぽい
-        sOP = gameObject.GetComponent<shootsOutPlant>();
         rb = GetComponent<Rigidbody2D>();
         drawArc = true;
-        StartCoroutine(DrawTrajectoryGradually());
+        startTragectory();
     }
 
 
+    public void selectedPlantModified()
+    {
+        pointerPrefab = pAS.selectedPlantPointer;//本当はplantDataに格納したのをから取得したいけど、なんかバグる
+        if (pointerObject != null){ Destroy(pointerObject);}
+        pointerObject = Instantiate(pointerPrefab, Vector3.zero, Quaternion.identity);
+    }
     void FixedUpdate()
     {
-        float velocityStep = 3f;
-        Debug.Log("angle: " + (Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg));
-        if (Input.GetKey(KeyCode.I))
-        {
-            if((Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg >= 95) ||( Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg <= 85))
-            {
-            if(player_Control.isFacingRight)
-            {
-                AdjustVelocity(velocityStep);
-            }
-            else
-            {
-                AdjustVelocity(-velocityStep);
-            }
-        }
-        }
-
-        if (Input.GetKey(KeyCode.K))
-        {
-            if((Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg <= -95) || (Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg >= -85))
-            {
-                if(player_Control.isFacingRight)
-                {
-                    AdjustVelocity(-velocityStep);
-                }
-                else
-                {
-                    AdjustVelocity(velocityStep);
-                }
-            }
-        }
-
-        
-        if(player_Control.isFacingRight)
-        {
-            initialVelocity.x = Mathf.Abs(initialVelocity.x);
-        }
-        else
-        {
-            initialVelocity.x = -Mathf.Abs(initialVelocity.x);
-        }
         if (!drawArc) return; // drawArc が false の場合は処理をスキップ
 
-
-
+        
         float timeStep = predictionTime / segmentCount;
         bool draw = false;
         float hitTime = float.MaxValue;
@@ -121,6 +84,7 @@ public class seedTrajectory : MonoBehaviour
         {
             if(pointerObject == null)
             {
+                pointerPrefab = pAS.selectedPlantPointer;
                 pointerObject = Instantiate(pointerPrefab, Vector3.zero, Quaternion.identity);
             }
             Vector3 hitPosition = GetArcPositionAtTime(hitTime);
@@ -129,35 +93,16 @@ public class seedTrajectory : MonoBehaviour
         else
         {
             Destroy(pointerObject);
-
         }
-
-        sOP.plantData.baseVelocity = initialVelocity;
     }
-
-    private void AdjustVelocity(float angleStep)
-    {
-        // 現在の速度ベクトルの角度を計算
-        float currentAngle = Mathf.Atan2(initialVelocity.y, initialVelocity.x) * Mathf.Rad2Deg;
-        Debug.Log("Current Angle: " + currentAngle);
-        // 角度を調整（半円を描くように）
-        currentAngle += angleStep;
-
-        // 新しい角度に基づいて速度ベクトルを計算
-
-        float speed = sOP.plantData.baseVelocity.magnitude;
-        initialVelocity.x = Mathf.Cos(currentAngle * Mathf.Deg2Rad) * speed;
-        initialVelocity.y = Mathf.Sin(currentAngle * Mathf.Deg2Rad) * speed;
-    }
+    
                 
-    private IEnumerator DrawTrajectoryGradually()
+    private void startTragectory()
     {
-        initialVelocity = sOP.plantData.baseVelocity;
         arcStartPosition = player.transform.position;
 
         float timeStep = predictionTime / segmentCount;//一セグメント毎の描画する時間の範囲（未来予知のような）
         bool draw = false;
-        float hitTime = float.MaxValue;
 
         for (int i = 0; i < segmentCount; i++)
         {
@@ -178,7 +123,7 @@ public class seedTrajectory : MonoBehaviour
                 }
             }*/
 
-            yield return new WaitForSeconds(trajectorySpeed * timeStep);//セグメント毎の描画する時間の範囲（未来予知のような）
+            //yield return new WaitForSeconds(trajectorySpeed * timeStep);//セグメント毎の描画する時間の範囲（未来予知のような）
         }
         /*
         if (hitTime != float.MaxValue)
@@ -193,7 +138,7 @@ public class seedTrajectory : MonoBehaviour
     private void ShowPointer(Vector3 position, Vector2 normal)
     {
         
-        if (normal == Vector2.zero) return; // 法線がゼロベクトルの場合は処理をスキップ
+        if (normal == Vector2.zero || !isShowingPointer) return; // 法線がゼロベクトルの場合は処理をスキップ
 
         float snappedX = Mathf.Floor(position.x+(normal.x*0.05f)) + 0.5f;
         float snappedY = Mathf.Floor(position.y-(normal.y*0.05f)) + 0.5f;
@@ -219,11 +164,12 @@ public class seedTrajectory : MonoBehaviour
 
     private Vector3 GetArcPositionAtTime(float time)
     {
+        initialVelocity = pAS.selectedPlantData.actualVelocity;
         return (arcStartPosition + ((initialVelocity * time) + (0.5f * time * time) * Physics.gravity));//軌跡のセグメント毎の計算はここ
     }
 
     private void SetLineRendererPosition(int index, float startTime, float endTime, bool draw = true)
-{
+    {
     arcStartPosition = transform.position;
 
     Vector3 startPosition = GetArcPositionAtTime(startTime);
@@ -237,7 +183,7 @@ public class seedTrajectory : MonoBehaviour
     basePlayerPositions[index] = transform.position;
 
     lineRenderers[index].enabled = draw;
-}
+    }
 
     private void CreateLineRendererObjects()
     {
@@ -272,9 +218,18 @@ public class seedTrajectory : MonoBehaviour
         RaycastHit2D hitInfo = Physics2D.Linecast((Vector2)startPosition, (Vector2)endPosition, collisionLayer);
         if (hitInfo.collider != null)
         {
+            if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("plant"))
+            {
+                isShowingPointer = false;
+                hitNormal = hitInfo.normal;
+                if(pointerObject != null)pointerObject.SetActive(false);
+                return startTime + (endTime - startTime) * (hitInfo.distance / Vector3.Distance(startPosition, endPosition));
+            }
+            if(pointerObject != null)pointerObject.SetActive(true);
+            isShowingPointer = true;
             float distance = Vector3.Distance(startPosition, endPosition);
             hitNormal = hitInfo.normal;
-            return startTime + (endTime - startTime) * (hitInfo.distance / distance);;
+            return startTime + (endTime - startTime) * (hitInfo.distance / distance);
         }
         hitNormal = Vector2.zero;
         return float.MaxValue;
